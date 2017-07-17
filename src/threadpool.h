@@ -109,8 +109,6 @@ private:
     IdleThreadsStack     _idle_threads;
     BusyThreadsList      _busy_threads;
     TaskQueue            _tasks;
-
-    Mutex                _mutex;
 };
 
 END_NAMESPACE

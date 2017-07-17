@@ -10,7 +10,6 @@
 #include "threadpool.h"
 #include <algorithm>
 #include <stdexcept>
-#include <iostream>
 
 BEGIN_NAMESPACE
 
@@ -115,7 +114,7 @@ size_t BusyThreadsList::size() const
 // Definition of class TaskQueue
 void TaskQueue::enter(Task *task)
 {
-    auto pos = find_if(
+    auto pos = std::find_if(
             _tasks.begin(), _tasks.end(),
             [task](Task *t) -> bool
             {return task->get_priority() >= t->get_priority();}
@@ -248,7 +247,6 @@ void ThreadPool::run()
         if (worker == nullptr) {
             continue;
         }
-        std::cout << "task" << task->get_tid() << std::endl;
 
         task->set_executor(worker);
         worker->set_task(task, _task_args[task].first);
