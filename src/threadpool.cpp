@@ -271,12 +271,13 @@ void ThreadPool::terminate()
 {
     // Wait for the busy threads to be idle
     // Remove from the busy list and add to the idle list
+    BusyThreadsList cur_busy_threads = _busy_threads;
     while (!_busy_threads.is_empty()) {
-        for (auto &thread : _all_threads) {
-            if (_busy_threads.exist(thread.first)) {
-                if (thread.first->get_thread_state() == Thread::State::SUSPENDED) {
-                    _busy_threads.remove(thread.first);
-                    _idle_threads.push(thread.first);
+        for (auto iter = cur_busy_threads.begin(); iter != cur_busy_threads.end(); ++iter) {
+            if (_busy_threads.exist(*iter)) {
+                if ((*iter)->get_thread_state() == Thread::State::SUSPENDED) {
+                    _busy_threads.remove(*iter);
+                    _idle_threads.push(*iter);
                 }
             }
         }
@@ -292,12 +293,13 @@ void ThreadPool::terminate()
 // Retrive the busy thread to idle when there is no idle threads
 void ThreadPool::retrieve_busy_to_idle()
 {
+    BusyThreadsList cur_busy_threads = _busy_threads;
     while (_idle_threads.is_empty()) {
-        for (auto &thread : _all_threads) {
-            if (_busy_threads.exist(thread.first)) {
-                if (thread.first->get_thread_state() == Thread::State::SUSPENDED) {
-                    _busy_threads.remove(thread.first);
-                    _idle_threads.push(thread.first);
+        for (auto iter = cur_busy_threads.begin(); iter != cur_busy_threads.end(); ++iter) {
+            if (_busy_threads.exist(*iter)) {
+                if ((*iter)->get_thread_state() == Thread::State::SUSPENDED) {
+                    _busy_threads.remove(*iter);
+                    _idle_threads.push(*iter);
                 }
             }
         }

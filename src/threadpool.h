@@ -54,6 +54,10 @@ public:
     bool is_empty() const;
     size_t size() const;
 
+    using iter_type = std::list<Thread*>::iterator;
+    iter_type begin() { return _threads.begin(); }
+    iter_type end() { return _threads.end(); }
+
 private:
     std::list<Thread*> _threads;
     Mutex              _mutex;
